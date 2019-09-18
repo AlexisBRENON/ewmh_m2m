@@ -8,7 +8,7 @@ from ewmh_m2m.geometry import Geometry
 def get_screens() -> Set[Geometry]:
     screens = set()
     for line in subprocess.run(["xrandr", "--query"], capture_output=True, text=True).stdout.split('\n'):
-        matching = re.match(r"^[^ ]* connected (?P<w>\d*)x(?P<h>\d*)\+(?P<x>\d*)\+(?P<y>\d*) .*", line)
+        matching = re.match(r"^[^ ]* connected (?:primary )?(?P<w>\d*)x(?P<h>\d*)\+(?P<x>\d*)\+(?P<y>\d*) .*", line)
         if matching:
             screens.add(Geometry(**dict(map(lambda i: (i[0], float(i[1])), matching.groupdict().items()))))
     return screens

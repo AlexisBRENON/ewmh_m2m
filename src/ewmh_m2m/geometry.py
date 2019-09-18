@@ -25,10 +25,10 @@ class Geometry:
         )
 
     def get_containing(self, containers):
-        container_xs = sorted(list({g.x for g in containers}))
-        container_ys = sorted(list({g.y for g in containers}))
-        container_x = [x for x in container_xs if x <= self.x][-1]
-        container_y = [y for y in container_ys if y <= self.y][-1]
+        container_xs = list({g.x for g in containers})
+        container_ys = list({g.y for g in containers})
+        container_x = sorted([x for x in container_xs if x < self.x + self.w / 2])[-1]
+        container_y = sorted([y for y in container_ys if y <= self.y + self.h / 2])[-1]
 
         return [s for s in containers if s.x == container_x and s.y == container_y][0]
 

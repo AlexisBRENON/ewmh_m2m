@@ -2,6 +2,7 @@
 import argparse
 import logging
 
+import ewmh_m2m
 from ewmh_m2m.ordinal import Ordinal
 from ewmh_m2m.screen import get_screens, get_next_screen
 from ewmh_m2m.window import ActiveWindow
@@ -35,7 +36,9 @@ def move_to_screen(args):
 
 def main():
     logging.basicConfig(level=logging.DEBUG)
-    arg_parser = argparse.ArgumentParser()
+    arg_parser = argparse.ArgumentParser(
+        epilog="""Version information: {}""".format(ewmh_m2m.__version__)
+    )
     arg_parser.add_argument(
         "--direction", "-d",
         action="store",

@@ -1,17 +1,12 @@
-import re
-import subprocess
 from typing import Set, Iterable
+
+import xpybutil.xinerama
 
 from ewmh_m2m.geometry import Geometry
 
 
 def get_screens() -> Set[Geometry]:
-    screens = set()
-    for line in subprocess.run(["xrandr", "--query"], capture_output=True, text=True).stdout.split('\n'):
-        matching = re.match(r"^[^ ]* connected (?:primary )?(?P<w>\d*)x(?P<h>\d*)\+(?P<x>\d*)\+(?P<y>\d*) .*", line)
-        if matching:
-            screens.add(Geometry(**dict(map(lambda i: (i[0], float(i[1])), matching.groupdict().items()))))
-    return screens
+    return {Geometry(x=s[0], y=s[1], w=s[2], h=s[3]) for s in xpybutil.xinerama.get_monitors()}
 
 
 def get_next_screen(current: Geometry, screens: Iterable[Geometry]) -> Geometry:

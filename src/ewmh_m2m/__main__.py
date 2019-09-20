@@ -25,11 +25,10 @@ def main():
         new_screen = get_next_screen(containing_screen, screens)
     except IndexError:
         logging.fatal("No sibling screen found")
-        return
-
-    new_window_geometry = relative_geometry.build_absolute(new_screen)
-    logging.debug("New window geometry: %s", new_window_geometry)
-    window.geometry = new_window_geometry
+    else:
+        new_window_geometry = relative_geometry.build_absolute(new_screen)
+        logging.debug("New window geometry: %s", new_window_geometry)
+        window.geometry = new_window_geometry
     window.maximized = window_state
 
 

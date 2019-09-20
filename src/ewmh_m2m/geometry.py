@@ -21,10 +21,10 @@ class Geometry:
     def build_absolute(self, container):
         """Build a new Geometry, representing self, which is relative to container"""
         return Geometry(
-            w=self.w * container.w,
-            h=self.h * container.h,
-            x=container.x + self.x * container.w,
-            y=container.y + self.y * container.h
+            w=int(self.w * container.w),
+            h=int(self.h * container.h),
+            x=int(container.x + self.x * container.w),
+            y=int(container.y + self.y * container.h)
         )
 
     def get_containing(self, containers):

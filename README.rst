@@ -2,6 +2,17 @@
 EWMH Compliant Move To Monitor utility
 ======================================
 
+|doc_badge| − `Licence`_ − `Authors`_ − `Changelog`_
+
+.. _Authors: ./AUTHORS.rst
+.. _Licence: ./LICENSE.txt
+.. _Changelog: ./CHANGELOG.rst
+
+.. |doc_badge| image:: https://readthedocs.org/projects/ewmh-m2m/badge/?version=latest
+   :target: https://ewmh-m2m.readthedocs.io/en/latest/?badge=latest
+   :alt: Documentation Status
+
+
 Rationale
 =========
 
@@ -29,8 +40,17 @@ Next versions (starting at 1.0.0) will accept some arguments:
 
 * to define in which direction to look for the "next" (up, bottom, left, right)
 * to define if you want to wrap to the previous if on last screen
-* to do more things if you have more ideas (features requests are welcome)
+* to do more things if you have more ideas
 
+Development
+===========
+
+Feel free to ask some features on `GitHub`_.
+You can also develop your own features and open Pull Requests.
+Take a look at the `technical documentation`_.
+
+.. _GitHub: https://github.com/AlexisBRENON/ewmh_m2m
+.. _technical documentation: https://ewmh-m2m.readthedocs.io/
 
 Note
 ====

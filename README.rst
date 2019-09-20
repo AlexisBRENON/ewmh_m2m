@@ -17,7 +17,7 @@ Install
 
 Just install the package with pip::
 
-    pip install ewmh_m2m
+    pip install ewmh-m2m  # Note the dash and not the underscore!
 
 You should now have a ``move-to-monitor`` command available.
 

@@ -4,10 +4,10 @@ from dataclasses import dataclass
 @dataclass(frozen=True)
 class Geometry:
     """Data class to manipulate rectangles defined as (x, y, w, h)"""
-    w: float = 0
-    h: float = 0
     x: float = 0
     y: float = 0
+    w: float = 0
+    h: float = 0
 
     def build_relative(self, container):
         """Build a new Geometry, representing self, relative to the "parent" container"""
@@ -29,8 +29,11 @@ class Geometry:
 
     def get_containing(self, containers):
         """Give a list of possible containers, find the one containing self.
-        :param containers List of possible containers
-        :type containers Iterable[Geometry]
+
+        Args:
+            containers (Iterable[Geometry]): List of possible containers
+        Returns:
+            The containing geometry
         """
         container_xs = list({g.x for g in containers})
         container_ys = list({g.y for g in containers})

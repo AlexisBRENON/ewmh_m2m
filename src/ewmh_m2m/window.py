@@ -10,7 +10,9 @@ class ActiveWindow:
     """Class to manage the currently active window."""
 
     def __init__(self):
-        self.window = xpybutil.ewmh.get_active_window().reply()[0]
+        cookie = xpybutil.ewmh.get_active_window()
+        self.conn = cookie.cookie.conn
+        self.window = cookie.reply()[0]
 
     @property
     def geometry(self) -> Geometry:

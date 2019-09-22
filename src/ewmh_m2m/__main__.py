@@ -30,6 +30,7 @@ def main():
         logging.debug("New window geometry: %s", new_window_geometry)
         window.geometry = new_window_geometry
     window.maximized = window_state
+    window.conn.flush()
 
 
 if __name__ == "__main__":

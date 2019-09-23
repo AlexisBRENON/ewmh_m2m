@@ -2,10 +2,13 @@
 import argparse
 import logging
 
+import xpybutil.rect
+
 import ewmh_m2m
 from ewmh_m2m.ordinal import Ordinal
 from ewmh_m2m.screen import get_screens, get_next_screen
 from ewmh_m2m.window import ActiveWindow
+from geometry import Geometry
 
 
 def move_to_screen(args):
@@ -14,7 +17,9 @@ def move_to_screen(args):
 
     screens = get_screens()
     logging.debug("Detected screens: %s", screens)
-    containing_screen = initial_window_geometry.get_containing(screens)
+    containing_screen = Geometry(*xpybutil.rect.get_monitor_area(
+        initial_window_geometry, screens
+    ))
     logging.debug("Containing screen: %s", containing_screen)
 
     window_state = window.maximized
@@ -47,8 +52,7 @@ def main():
         default=Ordinal.EAST.name.capitalize(),
         help="Direction in which to move the window (default: %(default)s)")
     arg_parser.add_argument("--no-wrap", "-W", action="store_true", help="Do not go back if no screen found.")
-    print(arg_parser.parse_args())
-    # move_to_screen(arg_parser.parse_args())
+    move_to_screen(arg_parser.parse_args())
 
 
 if __name__ == "__main__":

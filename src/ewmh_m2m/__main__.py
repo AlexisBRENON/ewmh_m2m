@@ -6,9 +6,9 @@ import xpybutil.rect
 
 import ewmh_m2m
 from ewmh_m2m.ordinal import Ordinal
-from ewmh_m2m.screen import get_screens, get_next_screen
+from ewmh_m2m.screen import get_screens, get_sibling_screens, get_sibling_screen
 from ewmh_m2m.window import ActiveWindow
-from geometry import Geometry
+from ewmh_m2m.geometry import Geometry
 
 
 def move_to_screen(args):
@@ -27,9 +27,10 @@ def move_to_screen(args):
     window_geometry = window.geometry
     relative_geometry = window_geometry.build_relative(containing_screen)
 
-    try:
-        new_screen = get_next_screen(containing_screen, screens)
-    except IndexError:
+    new_screen = get_sibling_screen(
+        get_sibling_screens(containing_screen, screens),
+        args.direction, args.no_wrap)
+    if not new_screen:
         logging.fatal("No sibling screen found")
     else:
         new_window_geometry = relative_geometry.build_absolute(new_screen)

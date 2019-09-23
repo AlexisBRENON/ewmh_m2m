@@ -24,3 +24,14 @@ class Ordinal(Enum):
 
     def __str__(self):
         return self.name
+
+    @property
+    def opposite(self):
+        if self is Ordinal.NORTH:
+            return Ordinal.SOUTH
+        if self is Ordinal.SOUTH:
+            return Ordinal.NORTH
+        if self is Ordinal.EAST:
+            return Ordinal.WEST
+        if self is Ordinal.WEST:
+            return Ordinal.EAST

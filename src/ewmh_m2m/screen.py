@@ -1,8 +1,9 @@
-from typing import Set, Iterable
+from typing import Set, Iterable, Dict, List, Optional
 
 import xpybutil.xinerama
 
 from ewmh_m2m.geometry import Geometry
+from ewmh_m2m.ordinal import Ordinal
 
 
 def get_screens() -> Set[Geometry]:
@@ -11,20 +12,28 @@ def get_screens() -> Set[Geometry]:
     return {Geometry(x=s[0], y=s[1], w=s[2], h=s[3]) for s in xpybutil.xinerama.get_monitors()}
 
 
-def get_next_screen(current: Geometry, screens: Iterable[Geometry]) -> Geometry:
-    """Given a screen and the list of active screens, find the "next" one.
-    The screens are searched left to right first then top to bottom.
-    If there is no left or bottom screen, we are wrapping to the right most or top most screens.
-    TODO: to be tested and add way to customize search algorithm (wrap/no-wrap, x-first/y-first, next/previous).
+def get_sibling_screens(current: Geometry, screens: Iterable[Geometry]) -> Dict[Ordinal, List[Geometry]]:
+    """Given a screen and the list of active screens, return the sibling ones.
+
+    Each list is ordered from the nearest screen to the furthest one.
     """
-    siblings_screens = sorted([
-        g for g in screens
-        if (g.x > current.x and g.y == current.y) or (g.y > current.y and g.x == current.x)
-    ], key=lambda g: (g.x, g.y))
-    if len(siblings_screens) == 0:
-        siblings_screens = sorted([
-            g for g in screens
-            if (g.x < current.x and g.y == current.y) or (g.y < current.y and g.x == current.x)
-        ], key=lambda g: (g.x, g.y))
-    return siblings_screens[0]
+    horizontal_screens = [g for g in screens if g.y == current.y]
+    vertical_screens = [g for g in screens if g.x == current.x]
+    return {
+        Ordinal.SOUTH: sorted([g for g in vertical_screens if g.y > current.y], key=lambda g: g.y),
+        Ordinal.NORTH: sorted([g for g in vertical_screens if g.y < current.y], key=lambda g: -1 * g.y),
+        Ordinal.EAST: sorted([g for g in horizontal_screens if g.x > current.x], key=lambda g: g.x),
+        Ordinal.WEST: sorted([g for g in horizontal_screens if g.x < current.x], key=lambda g: -1 * g.x)
+    }
+
+
+def get_sibling_screen(siblings: Dict[Ordinal, List[Geometry]],
+                       direction: Ordinal,
+                       no_wrap: bool) -> Optional[Geometry]:
+    if siblings[direction]:
+        return siblings[direction][0]
+    else:
+        if not no_wrap and siblings[direction.opposite]:
+            return siblings[direction.opposite][-1]
+    return None
 

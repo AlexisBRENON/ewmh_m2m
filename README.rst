@@ -35,12 +35,10 @@ You should now have a ``move-to-monitor`` command available.
 Usage
 =====
 
-Call ``move-to-monitor`` to move the active window to the next monitor.
-Next versions (starting at 1.0.0) will accept some arguments:
+You should bind the ``move-to-monitor`` command to your desired keyboard shortcut.
+This command also accepts some arguments to control where the window is moved.
+Type ``move-to-monitor --help`` in a terminal for the list of accepted options.
 
-* to define in which direction to look for the "next" (up, bottom, left, right)
-* to define if you want to wrap to the previous if on last screen
-* to do more things if you have more ideas
 
 Development
 ===========

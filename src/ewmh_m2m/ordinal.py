@@ -1,14 +1,11 @@
-from enum import Enum, auto
+from enum import Enum
 
 
 class Ordinal(Enum):
-    def _generate_next_value_(name, start, count, last_values):
-        return name
-
-    NORTH = auto()
-    EAST = auto()
-    SOUTH = auto()
-    WEST = auto()
+    NORTH = 0
+    EAST = 1
+    SOUTH = 2
+    WEST = 3
 
     @classmethod
     def get(cls, v: str):

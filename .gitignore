@@ -49,4 +49,4 @@ MANIFEST
 
 # Per-project virtualenvs
 .venv*/
-venv
+venv*/

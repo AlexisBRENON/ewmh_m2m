@@ -1,13 +1,10 @@
-from dataclasses import dataclass
-
-
-@dataclass(frozen=True)
 class Geometry:
     """Data class to manipulate rectangles defined as (x, y, w, h)"""
-    x: float = 0
-    y: float = 0
-    w: float = 0
-    h: float = 0
+    def __init__(self, x: float = 0, y: float = 0, w: float = 0, h: float = 0):
+        self.x = x
+        self.y = y
+        self.w = w
+        self.h = h
 
     def __iter__(self):
         yield self.x
@@ -33,3 +30,11 @@ class Geometry:
             y=int(container.y + self.y * container.h)
         )
 
+    def __eq__(self, other):
+        return list(self) == list(other)
+
+    def __repr__(self):
+        return "Geometry({0.x}, {0.y}, {0.w}, {0.h})".format(self)
+
+    def __hash__(self):
+        return hash(tuple(self))

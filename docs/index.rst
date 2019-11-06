@@ -7,8 +7,15 @@
    Changelog <changelog>
    Module Reference <api/modules>
 
-.. include:: ../README.rst
+.. include:: ./_partial/readme.rst
 
+.. _Authors: ./authors.html
+.. _Licence: ./license.html
+.. _Changelog: ./changelog.html
+
+.. |logo| image:: ./_static/ewmh_m2m.svg
+   :alt: Logo
+   :width: 500
 
 Indices and tables
 ==================

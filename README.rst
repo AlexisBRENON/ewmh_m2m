@@ -14,8 +14,8 @@ EWMH Compliant Move To Monitor utility
    :target: https://ewmh-m2m.readthedocs.io/en/latest/?badge=latest
    :alt: Documentation Status
 
-.. |test_badge| image:: https://github.com/AlexisBRENON/ewmh_m2m/workflows/Python%20tests/badge.svg
-   :target: https://github.com/AlexisBRENON/ewmh_m2m/actions?query=workflow%3A%22Python+tests%22+branch%3Amaster
+.. |test_badge| image:: https://github.com/AlexisBRENON/ewmh_m2m/workflows/Python/badge.svg
+   :target: https://github.com/AlexisBRENON/ewmh_m2m/actions?query=workflow%3APython+branch%3Amaster
    :alt: Test Status
 
 .. |version_badge| image:: https://img.shields.io/pypi/v/ewmh_m2m?label=Version

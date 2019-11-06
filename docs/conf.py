@@ -105,7 +105,7 @@ release = ''  # Is set by calling `setup.py docs`
 
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
-exclude_patterns = ['_build']
+exclude_patterns = ['_build', '_partial']
 
 # The reST default role (used for this markup: `text`) to use for all documents.
 # default_role = None
@@ -162,7 +162,7 @@ else:
 
 # The name of an image file (relative to this directory) to place at the top
 # of the sidebar.
-# html_logo = ""
+html_logo = "./_static/ewmh_m2m.svg"
 
 # The name of an image file (within the static path) to use as favicon of the
 # docs.  This file should be a Windows icon file (.ico) being 16x16 or 32x32
@@ -218,6 +218,8 @@ html_static_path = ['_static']
 # Output file base name for HTML help builder.
 htmlhelp_basename = 'ewmh_m2m-doc'
 
+# Disable click behavior for scaled images
+html_scaled_image_link = False
 
 # -- Options for LaTeX output --------------------------------------------------
 

@@ -1,2 +1,2 @@
-.. include:: ./docs/_partial/foo.rst
+.. include:: ./foo.rst
 

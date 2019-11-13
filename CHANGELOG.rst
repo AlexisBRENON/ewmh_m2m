@@ -2,6 +2,11 @@
 Changelog
 =========
 
+Version 1.1.1
+=============
+
+- Fix logo rendering on Pypi
+
 Version 1.1.0
 =============
 

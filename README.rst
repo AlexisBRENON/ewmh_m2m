@@ -1,10 +1,11 @@
-.. _Authors: ./AUTHORS.rst
-.. _Licence: ./LICENSE.txt
-.. _Changelog: ./CHANGELOG.rst
+.. _Authors: https://ewmh-m2m.readthedocs.io/en/latest/authors.html
+.. _Licence: https://ewmh-m2m.readthedocs.io/en/latest/license.html
+.. _Changelog: https://ewmh-m2m.readthedocs.io/en/latest/changelog.html
 
-.. |logo| image:: ./docs/_static/ewmh_m2m.svg
+.. |logo| image:: https://ewmh-m2m.readthedocs.io/en/latest/_images/ewmh_m2m.svg
    :alt: Logo
    :width: 500
+
 
 .. EndOfLinks
 

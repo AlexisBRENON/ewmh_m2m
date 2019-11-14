@@ -2,6 +2,11 @@
 Changelog
 =========
 
+Version 1.1.2
+=============
+
+- Fix logo rendering on GitHub, Pypi and RtD
+
 Version 1.1.1
 =============
 

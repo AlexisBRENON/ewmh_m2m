@@ -5,18 +5,22 @@ import xpybutil.ewmh
 import xpybutil.util
 import xpybutil.window
 
+from ewmh_m2m import M2MOptions
 from ewmh_m2m.geometry import Geometry
 from ewmh_m2m.ordinal import Ordinal
 from ewmh_m2m.screen import get_screens, get_sibling_screen, get_sibling_screens
 
 
-class ActiveWindow:
-    """Class to manage the currently active window."""
+class Window:
+    """Class to manage a window."""
 
-    def __init__(self):
+    def __init__(self, window_id: Optional[int] = None):
         cookie = xpybutil.ewmh.get_active_window()
         self.conn = cookie.cookie.conn
-        self.window = cookie.reply()[0]
+        if window_id is None:
+            self.window = cookie.reply()[0]
+        else:
+            self.window = window_id
         self.logger = logging.getLogger(self.__name__)
 
     @property
@@ -63,11 +67,21 @@ class ActiveWindow:
         else:
             return
 
-    def move_to_screen(self, direction: Ordinal, no_wrap: bool) -> None:
+    @property
+    def is_active(self) -> bool:
+        return xpybutil.ewmh.get_active_window().reply()[0] == self.window
+
+    @is_active.setter
+    def is_active(self, value: bool):
+        if value:
+            xpybutil.ewmh.request_active_window(self.window)
+        else:
+            xpybutil.ewmh.request_active_window(0)
+
+    def move_to_screen(self, options: M2MOptions) -> None:
         """Move the window to another screen.
 
-        :param direction: Direction to look for another screen
-        :param no_wrap: Prevent last screen and first screen (in the given direction) to be seen as siblings
+        :param options: Behavior control options
         """
         initial_window_geometry = self.geometry
 
@@ -85,7 +99,7 @@ class ActiveWindow:
 
         new_screen = get_sibling_screen(
             get_sibling_screens(containing_screen, screens),
-            direction, no_wrap)
+            options.direction, options.no_wrap)
         if not new_screen:
             self.logger.fatal("No sibling screen found")
         else:
@@ -93,5 +107,6 @@ class ActiveWindow:
             self.logger.debug("New window geometry: %s", new_window_geometry)
             self.geometry = new_window_geometry
         self.maximized = window_state
+        self.is_active = True
         self.conn.flush()
 

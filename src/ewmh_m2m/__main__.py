@@ -4,7 +4,7 @@ import logging
 
 import ewmh_m2m
 from ewmh_m2m.ordinal import Ordinal
-from ewmh_m2m.window import ActiveWindow
+from ewmh_m2m.window import Window
 
 _logger = logging.getLogger(__name__)
 
@@ -31,7 +31,10 @@ def main():
 
     args = arg_parser.parse_args()
     setup_log(args)
-    ActiveWindow().move_to_screen(args.direction, args.no_wrap)
+    Window().move_to_screen(ewmh_m2m.M2MOptions(
+        direction=args.direction,
+        no_wrap=args.no_wrap
+    ))
 
 
 if __name__ == "__main__":

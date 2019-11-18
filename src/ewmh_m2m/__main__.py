@@ -2,45 +2,11 @@
 import argparse
 import logging
 
-import xpybutil.rect
-
 import ewmh_m2m
 from ewmh_m2m.ordinal import Ordinal
-from ewmh_m2m.screen import get_screens, get_sibling_screens, get_sibling_screen
 from ewmh_m2m.window import ActiveWindow
-from ewmh_m2m.geometry import Geometry
-
 
 _logger = logging.getLogger(__name__)
-
-
-def move_to_screen(args):
-    window = ActiveWindow()
-    initial_window_geometry = window.geometry
-
-    screens = get_screens()
-    _logger.debug("Detected screens: %s", screens)
-    containing_screen = Geometry(*xpybutil.rect.get_monitor_area(
-        initial_window_geometry, screens
-    ))
-    _logger.debug("Containing screen: %s", containing_screen)
-
-    window_state = window.maximized
-    window.maximized = (False, False)
-    window_geometry = window.geometry
-    relative_geometry = window_geometry.build_relative(containing_screen)
-
-    new_screen = get_sibling_screen(
-        get_sibling_screens(containing_screen, screens),
-        args.direction, args.no_wrap)
-    if not new_screen:
-        _logger.fatal("No sibling screen found")
-    else:
-        new_window_geometry = relative_geometry.build_absolute(new_screen)
-        _logger.debug("New window geometry: %s", new_window_geometry)
-        window.geometry = new_window_geometry
-    window.maximized = window_state
-    window.conn.flush()
 
 
 def setup_log(args):
@@ -65,7 +31,7 @@ def main():
 
     args = arg_parser.parse_args()
     setup_log(args)
-    move_to_screen(args)
+    ActiveWindow().move_to_screen(args.direction, args.no_wrap)
 
 
 if __name__ == "__main__":

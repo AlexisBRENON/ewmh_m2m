@@ -2,12 +2,12 @@ import logging
 from typing import Tuple, Optional
 
 import xpybutil.ewmh
+import xpybutil.rect
 import xpybutil.util
 import xpybutil.window
 
 from ewmh_m2m import M2MOptions
 from ewmh_m2m.geometry import Geometry
-from ewmh_m2m.ordinal import Ordinal
 from ewmh_m2m.screen import get_screens, get_sibling_screen, get_sibling_screens
 
 
@@ -21,7 +21,7 @@ class Window:
             self.window = cookie.reply()[0]
         else:
             self.window = window_id
-        self.logger = logging.getLogger(self.__name__)
+        self.logger = logging.getLogger(type(self).__name__)
 
     @property
     def geometry(self) -> Geometry:
@@ -78,6 +78,17 @@ class Window:
         else:
             xpybutil.ewmh.request_active_window(0)
 
+    @property
+    def is_focused(self) -> bool:
+        return ('_NET_WM_STATE_FOCUSED' in
+                [xpybutil.util.get_atom_name(a) for a in xpybutil.ewmh.get_wm_state(self.window).reply()])
+
+    @is_focused.setter
+    def is_focused(self, value: bool) -> None:
+        xpybutil.ewmh.request_wm_state(
+            self.window, 1 if value else 0,
+            xpybutil.util.get_atom('_NET_WM_STATE_FOCUSED'))
+
     def move_to_screen(self, options: M2MOptions) -> None:
         """Move the window to another screen.
 
@@ -107,6 +118,6 @@ class Window:
             self.logger.debug("New window geometry: %s", new_window_geometry)
             self.geometry = new_window_geometry
         self.maximized = window_state
-        self.is_active = True
+        self.is_focused = True
         self.conn.flush()
 

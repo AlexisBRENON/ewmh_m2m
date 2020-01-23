@@ -2,6 +2,11 @@
 Changelog
 =========
 
+Version 1.1.3
+=============
+
+- Detect siblings screens even if not aligned with the current one
+
 Version 1.1.2
 =============
 

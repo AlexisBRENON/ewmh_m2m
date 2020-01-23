@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 import random
 
-import pytest
-
 import ewmh_m2m.screen
 from ewmh_m2m.geometry import Geometry
 from ewmh_m2m.ordinal import Ordinal
@@ -72,6 +70,17 @@ class TestScreen:
             Ordinal.SOUTH: [Geometry(2, 3, 1, 1), Geometry(2, 4, 1, 1)],
             Ordinal.WEST: [Geometry(1, 2, 1, 1), Geometry(0, 2, 1, 1)]
         }
+
+    def test_siblings_gh_issue_14(self):
+        """
+        Inspired by issue 14: https://github.com/AlexisBRENON/ewmh_m2m/issues/14
+        """
+        screens = {Geometry(2960, 0, 1920, 1200), Geometry(0, 176, 1280, 1024), Geometry(1280, 150, 1680, 1050)}
+        current = Geometry(0, 176, 1280, 1024)
+
+        siblings = ewmh_m2m.screen.get_sibling_screens(current, screens)
+
+        assert siblings[Ordinal.EAST] == [Geometry(1280, 150, 1680, 1050), Geometry(2960, 0, 1920, 1200)]
 
     def test_sibling_nominal(self):
         siblings = {

@@ -17,8 +17,8 @@ def get_sibling_screens(current: Geometry, screens: Iterable[Geometry]) -> Dict[
 
     Each list is ordered from the nearest screen to the furthest one.
     """
-    horizontal_screens = [g for g in screens if g.y == current.y]
-    vertical_screens = [g for g in screens if g.x == current.x]
+    horizontal_screens = [g for g in screens if current.horizontally_overlap(g)]
+    vertical_screens = [g for g in screens if current.vertically_overlap(g)]
     return {
         Ordinal.SOUTH: sorted([g for g in vertical_screens if g.y > current.y], key=lambda g: g.y),
         Ordinal.NORTH: sorted([g for g in vertical_screens if g.y < current.y], key=lambda g: -1 * g.y),

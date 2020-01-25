@@ -30,6 +30,15 @@ class Geometry:
             y=int(container.y + self.y * container.h)
         )
 
+    def horizontally_overlap(self, other) -> bool:
+        return self.y < other.y + other.h and self.y + self.h > other.y
+
+    def vertically_overlap(self, other) -> bool:
+        return self.x < other.x + other.w and self.x + self.w > other.x
+
+    def overlap(self, other) -> bool:
+        return self.horizontally_overlap(other) and self.vertically_overlap(other)
+
     def __eq__(self, other):
         return list(self) == list(other)
 

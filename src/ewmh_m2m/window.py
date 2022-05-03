@@ -28,6 +28,24 @@ class ActiveWindow:
         )
 
     @property
+    def fullscreen(self) -> bool:
+        """ Is the window fullscreen"""
+        state =  [xpybutil.util.get_atom_name(a) for a in xpybutil.ewmh.get_wm_state(self.window).reply()]
+        return '_NET_WM_STATE_FULLSCREEN' in state
+    
+    @fullscreen.setter
+    def fullscreen(self, state: bool):
+        atom = xpybutil.util.get_atom
+        if state:
+            xpybutil.ewmh.request_wm_state(
+                self.window, 1, atom('_NET_WM_STATE_FULLSCREEN')
+            )
+        else:
+            xpybutil.ewmh.request_wm_state(
+                self.window, 0, atom('_NET_WM_STATE_FULLSCREEN')
+            )
+
+    @property
     def maximized(self) -> Tuple[bool, bool]:
         """Is the window maximized.
         Returns a boolean 2-tuple: (horizontally maximized?, vertically maximized?)."""

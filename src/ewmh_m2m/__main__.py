@@ -28,7 +28,7 @@ def move_to_screen(args):
     window_maximized_state = window.maximized
     window_fullscreen_state = window.fullscreen
     window.maximized = (False, False)
-    window.fullscreen = False
+    window.fullscreen = 0
     window_geometry = window.geometry
     relative_geometry = window_geometry.build_relative(containing_screen)
 

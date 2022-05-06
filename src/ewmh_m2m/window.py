@@ -26,18 +26,9 @@ class ActiveWindow:
             self.window,
             **geometry.__dict__
         )
-
-    @property
-    def fullscreen(self) -> bool:
-        """ Is the window fullscreen"""
-        state =  [xpybutil.util.get_atom_name(a) for a in xpybutil.ewmh.get_wm_state(self.window).reply()]
-        return '_NET_WM_STATE_FULLSCREEN' in state
-    
-    @fullscreen.setter
-    def fullscreen(self, state: int):
-        atom = xpybutil.util.get_atom
+    def fullscreen(self, state: bool):
         xpybutil.ewmh.request_wm_state(
-            self.window, state, atom('_NET_WM_STATE_FULLSCREEN')
+            self.window, int(state), xpybutil.util.get_atom('_NET_WM_STATE_FULLSCREEN')
         )
 
     @property

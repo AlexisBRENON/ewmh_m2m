@@ -25,8 +25,10 @@ def move_to_screen(args):
     ))
     _logger.debug("Containing screen: %s", containing_screen)
 
-    window_state = window.maximized
+    window_maximized_state = window.maximized
+    window_fullscreen_state = window.fullscreen
     window.maximized = (False, False)
+    window.fullscreen = False
     window_geometry = window.geometry
     relative_geometry = window_geometry.build_relative(containing_screen)
 
@@ -39,7 +41,8 @@ def move_to_screen(args):
         new_window_geometry = relative_geometry.build_absolute(new_screen)
         _logger.debug("New window geometry: %s", new_window_geometry)
         window.geometry = new_window_geometry
-    window.maximized = window_state
+    window.maximized = window_maximized_state
+    window.fullscreen = window_fullscreen_state
     window.conn.flush()
 
 

@@ -25,30 +25,19 @@ def move_to_screen(args):
     ))
     _logger.debug("Containing screen: %s", containing_screen)
 
-    window_maximized_state = window.maximized
-    window_fullscreen_state = window.fullscreen
-    window.maximized = (False, False)
-    window.fullscreen = False
-    window_geometry = window.geometry
-    relative_geometry = window_geometry.build_relative(containing_screen)
+    with window.movable() as win:
+        window_geometry = win.geometry
+        relative_geometry = window_geometry.build_relative(containing_screen)
 
-    new_screen = get_sibling_screen(
-        get_sibling_screens(containing_screen, screens),
-        args.direction, args.no_wrap)
-    try:
+        new_screen = get_sibling_screen(
+            get_sibling_screens(containing_screen, screens),
+            args.direction, args.no_wrap)
         if not new_screen:
             raise ValueError("No sibling screen found")
-        else:
-            new_window_geometry = relative_geometry.build_absolute(new_screen)
-            _logger.debug("New window geometry: %s", new_window_geometry)
-            window.geometry = new_window_geometry
-    except ValueError as e:
-        _logger.fatal(e)
-        raise
-    finally:
-        window.maximized = window_maximized_state
-        window.fullscreen = window_fullscreen_state
-        window.conn.flush()
+
+        new_window_geometry = relative_geometry.build_absolute(new_screen)
+        _logger.debug("New window geometry: %s", new_window_geometry)
+        win.geometry = new_window_geometry
 
 
 def setup_log(args):

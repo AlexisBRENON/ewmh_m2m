@@ -78,8 +78,9 @@ class ActiveWindow:
         self.maximized = (False, False)
         self.fullscreen = False
 
-        yield self
-
-        self.maximized = initial_maximized_state
-        self.fullscreen = initial_fullscreen_state
-        self.conn.flush()
+        try:
+            yield self
+        finally:
+            self.maximized = initial_maximized_state
+            self.fullscreen = initial_fullscreen_state
+            self.conn.flush()

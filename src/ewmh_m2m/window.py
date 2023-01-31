@@ -1,3 +1,4 @@
+from contextlib import contextmanager
 from typing import Tuple, Optional
 
 from ewmh_m2m.geometry import Geometry
@@ -68,3 +69,18 @@ class ActiveWindow:
                 atom('_NET_WM_STATE_MAXIMIZED_HORZ'), atom('_NET_WM_STATE_MAXIMIZED_VERT'))
         else:
             return
+
+    @contextmanager
+    def movable(self):
+        """Context manager to prepare the window to be moved."""
+        initial_maximized_state = self.maximized
+        initial_fullscreen_state = self.fullscreen
+        self.maximized = (False, False)
+        self.fullscreen = False
+
+        try:
+            yield self
+        finally:
+            self.maximized = initial_maximized_state
+            self.fullscreen = initial_fullscreen_state
+            self.conn.flush()

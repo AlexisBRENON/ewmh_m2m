@@ -56,7 +56,7 @@ def main():
         action="store",
         type=Ordinal.get,
         choices=list(Ordinal),
-        default=Ordinal.EAST.name.capitalize(),
+        default=Ordinal.NEXT.name.capitalize(),
         help="Direction in which to move the window (default: %(default)s)")
     arg_parser.add_argument("--no-wrap", "-W", action="store_true", help="Do not go back if no screen found.")
 

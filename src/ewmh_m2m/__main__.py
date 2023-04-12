@@ -36,6 +36,10 @@ def move_to_screen(args):
             raise ValueError("No sibling screen found")
 
         new_window_geometry = relative_geometry.build_absolute(new_screen)
+        if args.no_resize:
+            new_window_geometry.w = window_geometry.w
+            new_window_geometry.h = window_geometry.h
+
         _logger.debug("New window geometry: %s", new_window_geometry)
         win.geometry = new_window_geometry
 
@@ -59,6 +63,7 @@ def main():
         default=Ordinal.EAST.name.capitalize(),
         help="Direction in which to move the window (default: %(default)s)")
     arg_parser.add_argument("--no-wrap", "-W", action="store_true", help="Do not go back if no screen found.")
+    arg_parser.add_argument("--no-resize", "-R", action="store_true", help="Do not resize if window is not maximized.")
 
     args = arg_parser.parse_args()
     setup_log(args)

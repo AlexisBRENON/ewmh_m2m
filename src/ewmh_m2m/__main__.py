@@ -54,9 +54,9 @@ def main():
     arg_parser.add_argument(
         "--direction", "-d",
         action="store",
-        type=Ordinal.get,
-        choices=list(Ordinal),
-        default=Ordinal.NEXT.name.capitalize(),
+        type=Ordinal.__getitem__,
+        choices=[o.name for o in sorted(Ordinal, key=lambda o: o.value)],
+        default=Ordinal.EAST_SOUTHEAST.name,
         help="Direction in which to move the window (default: %(default)s)")
     arg_parser.add_argument("--no-wrap", "-W", action="store_true", help="Do not go back if no screen found.")
 

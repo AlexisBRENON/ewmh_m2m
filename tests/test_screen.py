@@ -32,11 +32,8 @@ class TestScreen:
 
         siblings = ewmh_m2m.screen.get_sibling_screens(current, screens)
 
-        assert siblings == {
-            Ordinal.SOUTH: [], Ordinal.NORTH: [],
-            Ordinal.EAST: [Geometry(30, 0, 10, 10), Geometry(40, 0, 10, 10)],
-            Ordinal.WEST: [Geometry(10, 0, 10, 10), Geometry(0, 0, 10, 10)]
-        }
+        assert siblings[Ordinal.EAST] == [Geometry(30, 0, 10, 10), Geometry(40, 0, 10, 10)]
+        assert siblings[Ordinal.WEST] == [Geometry(10, 0, 10, 10), Geometry(0, 0, 10, 10)]
 
     def test_siblings_vertical(self):
         current = Geometry(0, 20, 10, 10)
@@ -50,11 +47,8 @@ class TestScreen:
 
         siblings = ewmh_m2m.screen.get_sibling_screens(current, screens)
 
-        assert siblings == {
-            Ordinal.EAST: [], Ordinal.WEST: [],
-            Ordinal.SOUTH: [Geometry(0, 30, 10, 10), Geometry(0, 40, 10, 10)],
-            Ordinal.NORTH: [Geometry(0, 10, 10, 10), Geometry(0, 0, 10, 10)]
-        }
+        assert siblings[Ordinal.SOUTH] == [Geometry(0, 30, 10, 10), Geometry(0, 40, 10, 10)]
+        assert siblings[Ordinal.NORTH] == [Geometry(0, 10, 10, 10), Geometry(0, 0, 10, 10)]
 
     def test_siblings(self):
         screens = sorted(
@@ -64,12 +58,26 @@ class TestScreen:
 
         siblings = ewmh_m2m.screen.get_sibling_screens(current, screens)
 
-        assert siblings == {
-            Ordinal.NORTH: [Geometry(2, 1, 1, 1), Geometry(2, 0, 1, 1)],
-            Ordinal.EAST: [Geometry(3, 2, 1, 1), Geometry(4, 2, 1, 1)],
-            Ordinal.SOUTH: [Geometry(2, 3, 1, 1), Geometry(2, 4, 1, 1)],
-            Ordinal.WEST: [Geometry(1, 2, 1, 1), Geometry(0, 2, 1, 1)]
-        }
+        assert siblings[Ordinal.NORTH] == [Geometry(2, 1, 1, 1), Geometry(2, 0, 1, 1)]
+        assert siblings[Ordinal.EAST] == [Geometry(3, 2, 1, 1), Geometry(4, 2, 1, 1)]
+        assert siblings[Ordinal.SOUTH] == [Geometry(2, 3, 1, 1), Geometry(2, 4, 1, 1)]
+        assert siblings[Ordinal.WEST] == [Geometry(1, 2, 1, 1), Geometry(0, 2, 1, 1)]
+
+        assert siblings[Ordinal.NORTHEAST] == [Geometry(3, 1, 1, 1), Geometry(3, 0, 1, 1), Geometry(4, 1, 1, 1), Geometry(4, 0, 1, 1)]
+        assert siblings[Ordinal.NORTHWEST] == [Geometry(1, 1, 1, 1), Geometry(1, 0, 1, 1), Geometry(0, 1, 1, 1), Geometry(0, 0, 1, 1)]
+        assert siblings[Ordinal.SOUTHWEST] == [Geometry(1, 3, 1, 1), Geometry(1, 4, 1, 1), Geometry(0, 3, 1, 1), Geometry(0, 4, 1, 1)]
+        assert siblings[Ordinal.SOUTHEAST] == [Geometry(3, 3, 1, 1), Geometry(3, 4, 1, 1), Geometry(4, 3, 1, 1), Geometry(4, 4, 1, 1)]
+
+        assert set(siblings[Ordinal.EAST_NORTHEAST]) == set(siblings[Ordinal.EAST] + siblings[Ordinal.NORTHEAST])
+        assert set(siblings[Ordinal.NORTH_NORTHEAST]) == set(siblings[Ordinal.NORTH] + siblings[Ordinal.NORTHEAST])
+        assert set(siblings[Ordinal.NORTH_NORTHWEST]) == set(siblings[Ordinal.NORTH] + siblings[Ordinal.NORTHWEST])
+        assert set(siblings[Ordinal.WEST_NORTHWEST]) == set(siblings[Ordinal.WEST] + siblings[Ordinal.NORTHWEST])
+        assert set(siblings[Ordinal.WEST_SOUTHWEST]) == set(siblings[Ordinal.WEST] + siblings[Ordinal.SOUTHWEST])
+        assert set(siblings[Ordinal.SOUTH_SOUTHWEST]) == set(siblings[Ordinal.SOUTH] + siblings[Ordinal.SOUTHWEST])
+        assert set(siblings[Ordinal.SOUTH_SOUTHEAST]) == set(siblings[Ordinal.SOUTH] + siblings[Ordinal.SOUTHEAST])
+        assert set(siblings[Ordinal.EAST_SOUTHEAST]) == set(siblings[Ordinal.EAST] + siblings[Ordinal.SOUTHEAST])
+
+
 
     def test_siblings_gh_issue_14(self):
         """

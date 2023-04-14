@@ -3,6 +3,7 @@ import math
 
 _HEXADAN = 360 / 16
 
+
 class Ordinal(Enum):
     EAST = 0 * _HEXADAN
     NORTH = 4 * _HEXADAN

@@ -23,50 +23,72 @@ class ActiveWindow:
 
     @geometry.setter
     def geometry(self, geometry: Geometry):
-        xpybutil.window.moveresize(
-            self.window,
-            **geometry.__dict__
-        )
+        xpybutil.window.moveresize(self.window, **geometry.__dict__)
+
     @property
     def fullscreen(self) -> bool:
         """Is the window in fullscreen mode"""
-        state =  [xpybutil.util.get_atom_name(a) for a in xpybutil.ewmh.get_wm_state(self.window).reply()]
-        return '_NET_WM_STATE_FULLSCREEN' in state
+        state = [
+            xpybutil.util.get_atom_name(a)
+            for a in xpybutil.ewmh.get_wm_state(self.window).reply()
+        ]
+        return "_NET_WM_STATE_FULLSCREEN" in state
 
     @fullscreen.setter
     def fullscreen(self, state: bool):
         xpybutil.ewmh.request_wm_state(
-            self.window, int(state), xpybutil.util.get_atom('_NET_WM_STATE_FULLSCREEN')
+            self.window, int(state), xpybutil.util.get_atom("_NET_WM_STATE_FULLSCREEN")
         )
 
     @property
     def maximized(self) -> Tuple[bool, bool]:
         """Is the window maximized.
         Returns a boolean 2-tuple: (horizontally maximized?, vertically maximized?)."""
-        state =  [xpybutil.util.get_atom_name(a) for a in xpybutil.ewmh.get_wm_state(self.window).reply()]
-        return '_NET_WM_STATE_MAXIMIZED_HORZ' in state, '_NET_WM_STATE_MAXIMIZED_VERT' in state
+        state = [
+            xpybutil.util.get_atom_name(a)
+            for a in xpybutil.ewmh.get_wm_state(self.window).reply()
+        ]
+        return (
+            "_NET_WM_STATE_MAXIMIZED_HORZ" in state,
+            "_NET_WM_STATE_MAXIMIZED_VERT" in state,
+        )
 
     @maximized.setter
     def maximized(self, state: Tuple[Optional[bool], Optional[bool]]):
         """Set the maximized state of the window.
-        Pass a boolean 2-tuple (see func:maximized) which can contain None to leave this state unchanged."""
+        Pass a boolean 2-tuple (see func:maximized) which can contain None to leave this state unchanged.
+        """
         atom = xpybutil.util.get_atom
         if state[0] and state[1]:
             xpybutil.ewmh.request_wm_state(
-                self.window, 1,
-                atom('_NET_WM_STATE_MAXIMIZED_HORZ'), atom('_NET_WM_STATE_MAXIMIZED_VERT'))
+                self.window,
+                1,
+                atom("_NET_WM_STATE_MAXIMIZED_HORZ"),
+                atom("_NET_WM_STATE_MAXIMIZED_VERT"),
+            )
         elif state[0]:
-            xpybutil.ewmh.request_wm_state(self.window, 1, atom('_NET_WM_STATE_MAXIMIZED_HORZ'))
+            xpybutil.ewmh.request_wm_state(
+                self.window, 1, atom("_NET_WM_STATE_MAXIMIZED_HORZ")
+            )
             if state[1] is not None:
-                xpybutil.ewmh.request_wm_state(self.window, 0, atom('_NET_WM_STATE_MAXIMIZED_VERT'))
+                xpybutil.ewmh.request_wm_state(
+                    self.window, 0, atom("_NET_WM_STATE_MAXIMIZED_VERT")
+                )
         elif state[1]:
-            xpybutil.ewmh.request_wm_state(self.window, 1, atom('_NET_WM_STATE_MAXIMIZED_VERT'))
+            xpybutil.ewmh.request_wm_state(
+                self.window, 1, atom("_NET_WM_STATE_MAXIMIZED_VERT")
+            )
             if state[0] is not None:
-                xpybutil.ewmh.request_wm_state(self.window, 0, atom('_NET_WM_STATE_MAXIMIZED_HORZ'))
+                xpybutil.ewmh.request_wm_state(
+                    self.window, 0, atom("_NET_WM_STATE_MAXIMIZED_HORZ")
+                )
         elif state[0] is not None and state[1] is not None:
             xpybutil.ewmh.request_wm_state(
-                self.window, 0,
-                atom('_NET_WM_STATE_MAXIMIZED_HORZ'), atom('_NET_WM_STATE_MAXIMIZED_VERT'))
+                self.window,
+                0,
+                atom("_NET_WM_STATE_MAXIMIZED_HORZ"),
+                atom("_NET_WM_STATE_MAXIMIZED_VERT"),
+            )
         else:
             return
 

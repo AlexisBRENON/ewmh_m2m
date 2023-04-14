@@ -5,6 +5,7 @@ from ewmh_m2m.ordinal import Ordinal
 
 class Geometry:
     """Data class to manipulate rectangles defined as (x, y, w, h)"""
+
     def __init__(self, x: float = 0, y: float = 0, w: float = 0, h: float = 0):
         self.x = x
         self.y = y
@@ -23,7 +24,7 @@ class Geometry:
             w=self.w / container.w,
             h=self.h / container.h,
             x=(self.x - container.x) / container.w,
-            y=(self.y - container.y) / container.h
+            y=(self.y - container.y) / container.h,
         )
 
     def build_absolute(self, container):
@@ -32,7 +33,7 @@ class Geometry:
             w=int(self.w * container.w),
             h=int(self.h * container.h),
             x=int(container.x + self.x * container.w),
-            y=int(container.y + self.y * container.h)
+            y=int(container.y + self.y * container.h),
         )
 
     def horizontally_overlap(self, other) -> bool:
@@ -54,13 +55,13 @@ class Geometry:
             result -= {o for o in Ordinal if o.value % 90 == 0}
 
         if other.x > self.x:
-            result &= {o for o in Ordinal if o.cos >= 0 }
+            result &= {o for o in Ordinal if o.cos >= 0}
         if other.y < self.y:
-            result &= {o for o in Ordinal if o.sin >= 0 }
+            result &= {o for o in Ordinal if o.sin >= 0}
         if other.x < self.x:
-            result &= {o for o in Ordinal if o.cos <= 0 }
+            result &= {o for o in Ordinal if o.cos <= 0}
         if other.y > self.y:
-            result &= {o for o in Ordinal if o.sin <= 0 }
+            result &= {o for o in Ordinal if o.sin <= 0}
 
         return result
 

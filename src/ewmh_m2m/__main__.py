@@ -20,9 +20,9 @@ def move_to_screen(args):
 
     screens = get_screens()
     _logger.debug("Detected screens: %s", screens)
-    containing_screen = Geometry(*xpybutil.rect.get_monitor_area(
-        initial_window_geometry, screens
-    ))
+    containing_screen = Geometry(
+        *xpybutil.rect.get_monitor_area(initial_window_geometry, screens)
+    )
     _logger.debug("Containing screen: %s", containing_screen)
 
     with window.movable() as win:
@@ -31,7 +31,9 @@ def move_to_screen(args):
 
         new_screen = get_sibling_screen(
             get_sibling_screens(containing_screen, screens),
-            args.direction, args.no_wrap)
+            args.direction,
+            args.no_wrap,
+        )
         if not new_screen:
             raise ValueError("No sibling screen found")
 
@@ -49,16 +51,35 @@ def main():
     arg_parser = argparse.ArgumentParser(
         epilog="""Version information: {}""".format(ewmh_m2m.__version__)
     )
-    arg_parser.add_argument("--verbose", "-v", action="count", default=0, help="Increase verbosity (may be repeated)")
-    arg_parser.add_argument("--quiet", "-q", action="count", default=0, help="Decrease verbosity (may be repeated)")
     arg_parser.add_argument(
-        "--direction", "-d",
+        "--verbose",
+        "-v",
+        action="count",
+        default=0,
+        help="Increase verbosity (may be repeated)",
+    )
+    arg_parser.add_argument(
+        "--quiet",
+        "-q",
+        action="count",
+        default=0,
+        help="Decrease verbosity (may be repeated)",
+    )
+    arg_parser.add_argument(
+        "--direction",
+        "-d",
         action="store",
         type=Ordinal.__getitem__,
         choices=[o.name for o in sorted(Ordinal, key=lambda o: o.value)],
         default=Ordinal.EAST_SOUTHEAST.name,
-        help="Direction in which to move the window (default: %(default)s)")
-    arg_parser.add_argument("--no-wrap", "-W", action="store_true", help="Do not go back if no screen found.")
+        help="Direction in which to move the window (default: %(default)s)",
+    )
+    arg_parser.add_argument(
+        "--no-wrap",
+        "-W",
+        action="store_true",
+        help="Do not go back if no screen found.",
+    )
 
     args = arg_parser.parse_args()
     setup_log(args)

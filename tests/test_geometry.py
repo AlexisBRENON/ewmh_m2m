@@ -3,7 +3,6 @@ from ewmh_m2m.ordinal import Ordinal
 
 
 class TestGeometry:
-
     def test_horizontally_not_overlap(self):
         g1 = Geometry(0, 0, 1, 1)
         g2 = Geometry(10, 10, 1, 1)
@@ -53,10 +52,18 @@ class TestGeometry:
         g1 = Geometry(0, 0, 1, 1)
         g2 = Geometry(1, 0, 1, 1)
 
-        assert g1.directions_to(g2) == {Ordinal.EAST, Ordinal.EAST_NORTHEAST, Ordinal.EAST_SOUTHEAST}
+        assert g1.directions_to(g2) == {
+            Ordinal.EAST,
+            Ordinal.EAST_NORTHEAST,
+            Ordinal.EAST_SOUTHEAST,
+        }
 
     def test_directions_not_aligned(self):
         g1 = Geometry(0, 0, 1, 1)
         g2 = Geometry(1, 1, 1, 1)
 
-        assert g1.directions_to(g2) == {Ordinal.SOUTH_SOUTHEAST, Ordinal.SOUTHEAST, Ordinal.EAST_SOUTHEAST}
+        assert g1.directions_to(g2) == {
+            Ordinal.SOUTH_SOUTHEAST,
+            Ordinal.SOUTHEAST,
+            Ordinal.EAST_SOUTHEAST,
+        }

@@ -1,44 +1,32 @@
 from enum import Enum
+import math
 
+_HEXADAN = 360 / 16
 
 class Ordinal(Enum):
-    NORTH = 0
-    EAST = 1
-    SOUTH = 2
-    WEST = 3
-    NEXT = 4
-    PREV = 5
+    EAST = 0 * _HEXADAN
+    NORTH = 4 * _HEXADAN
+    WEST = 8 * _HEXADAN
+    SOUTH = 12 * _HEXADAN
 
-    @classmethod
-    def get(cls, v: str):
-        if v.upper()[0] == 'E':
-            return Ordinal.EAST
-        if v.upper()[0] == 'W':
-            return Ordinal.WEST
-        if v.upper()[0:2] == 'NO':
-            return Ordinal.NORTH
-        if v.upper()[0] == 'S':
-            return Ordinal.SOUTH
-        if v.upper()[0:2] == 'NE':
-            return Ordinal.NEXT
-        if v.upper()[0] == 'P':
-            return Ordinal.PREV
-        raise TypeError("No direction match with '{}'".format(v))
+    NORTHEAST = 2 * _HEXADAN
+    NORTHWEST = 6 * _HEXADAN
+    SOUTHWEST = 10 * _HEXADAN
+    SOUTHEAST = 14 * _HEXADAN
 
-    def __str__(self):
-        return self.name
+    EAST_NORTHEAST = 1 * _HEXADAN
+    NORTH_NORTHEAST = 3 * _HEXADAN
+    NORTH_NORTHWEST = 5 * _HEXADAN
+    WEST_NORTHWEST = 7 * _HEXADAN
+    WEST_SOUTHWEST = 9 * _HEXADAN
+    SOUTH_SOUTHWEST = 11 * _HEXADAN
+    SOUTH_SOUTHEAST = 13 * _HEXADAN
+    EAST_SOUTHEAST = 15 * _HEXADAN
+
+    def __init__(self, value) -> None:
+        self.sin = round(math.sin(math.radians(value)), 6)
+        self.cos = round(math.cos(math.radians(value)), 6)
 
     @property
     def opposite(self):
-        if self is Ordinal.NORTH:
-            return Ordinal.SOUTH
-        if self is Ordinal.SOUTH:
-            return Ordinal.NORTH
-        if self is Ordinal.EAST:
-            return Ordinal.WEST
-        if self is Ordinal.WEST:
-            return Ordinal.EAST
-        if self is Ordinal.NEXT:
-            return Ordinal.PREV
-        if self is Ordinal.PREV:
-            return Ordinal.NEXT
+        return Ordinal((self.value + 180) % 360)

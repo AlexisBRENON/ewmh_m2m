@@ -1,3 +1,8 @@
+import math
+import typing
+from ewmh_m2m.ordinal import Ordinal
+
+
 class Geometry:
     """Data class to manipulate rectangles defined as (x, y, w, h)"""
     def __init__(self, x: float = 0, y: float = 0, w: float = 0, h: float = 0):
@@ -38,6 +43,26 @@ class Geometry:
 
     def overlap(self, other) -> bool:
         return self.horizontally_overlap(other) and self.vertically_overlap(other)
+
+    def directions_to(self, other: "Geometry") -> typing.Collection[Ordinal]:
+        result = set(Ordinal)
+        if self.horizontally_overlap(other):
+            result &= {o for o in Ordinal if abs(o.sin) < 0.5}
+        elif self.vertically_overlap(other):
+            result &= {o for o in Ordinal if abs(o.cos) < 0.5}
+        else:
+            result -= {o for o in Ordinal if o.value % 90 == 0}
+
+        if other.x > self.x:
+            result &= {o for o in Ordinal if o.cos >= 0 }
+        if other.y < self.y:
+            result &= {o for o in Ordinal if o.sin >= 0 }
+        if other.x < self.x:
+            result &= {o for o in Ordinal if o.cos <= 0 }
+        if other.y > self.y:
+            result &= {o for o in Ordinal if o.sin <= 0 }
+
+        return result
 
     def __eq__(self, other):
         return list(self) == list(other)

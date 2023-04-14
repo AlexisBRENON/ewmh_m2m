@@ -13,7 +13,7 @@ jobs:
     steps:
       - uses: actions/checkout@v1
       - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v1
+        uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python-version }}
       - name: Set up pip
@@ -22,6 +22,8 @@ jobs:
           pip install --upgrade setuptools wheel
       - name: Install
         run: pip install '.[testing]' 'urllib3<1.27'
+      - name: Lint
+        run: python -m black --diff --check .
       - name: Test with pytest
         run: python setup.py test
 
@@ -32,7 +34,7 @@ jobs:
     steps:
       - uses: actions/checkout@v1
       - name: Set up Python
-        uses: actions/setup-python@v1
+        uses: actions/setup-python@v4
         with:
           python-version: 3.x
       - name: Set up pip

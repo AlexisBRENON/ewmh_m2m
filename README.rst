@@ -67,10 +67,5 @@ Take a look at the `technical documentation`_.
 .. _GitHub: https://github.com/AlexisBRENON/ewmh_m2m
 .. _technical documentation: https://ewmh-m2m.readthedocs.io/
 
-Note
-====
-
-This project has been set up using PyScaffold 3.2.2. For details and usage
-information on PyScaffold see https://pyscaffold.org/.
 
 .. _move-to-next-monitor: https://github.com/jc00ke/move-to-next-monitor

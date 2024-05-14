@@ -1,0 +1,52 @@
+[build-system]
+requires = ["hatchling", "hatch-vcs"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build]
+packages = ["src/ewmh_m2m"]
+
+[tool.hatch.version]
+source = "vcs"
+
+[tool.hatch.build.hooks.vcs]
+version-file = "src/ewmh_m2m/__init__.py"
+
+[project]
+dynamic = ["version"]
+name = "ewmh_m2m"
+authors = [
+    { name="Alexis BRENON", email="brenon.alexis@gmail.com" },
+]
+description = "Move window between monitor in EWMH compliant WM"
+readme = "README.rst"
+license = {file = "LICENSE.txt"}
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Development Status :: 5 - Production/Stable",
+]
+requires-python = ">=3.8"
+dependencies = [
+    "xcffib==0.8.1",
+    "xpybutil==0.0.6"
+]
+
+[project.optional-dependencies]
+testing = [ "pytest", "pytest-cov" ]
+
+[project.urls]
+Documentation = "https://ewmh-m2m.readthedocs.io"
+Repository = "https://github.com/AlexisBRENON/ewmh_m2m"
+
+[project.scripts]
+move-to-monitor = "ewmh_m2m.__main__:main"
+
+
+[tool.pytest.ini_options]
+addopts = "--cov ewmh_m2m --cov-report term-missing --verbose"
+norecursedirs = [
+    "dist",
+    "build",
+    ".tox"
+]
+testpaths = ["tests"]

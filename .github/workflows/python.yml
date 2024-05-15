@@ -28,6 +28,8 @@ jobs:
     runs-on: ubuntu-latest
     needs: test
     if: startsWith(github.event.ref, 'refs/tags/v')
+    env:
+      SETUPTOOLS_SCM_PRETEND_VERSION: ${{ github.ref_name }}
     permissions:
       id-token: write  # IMPORTANT: this permission is mandatory for trusted publishing
     steps:

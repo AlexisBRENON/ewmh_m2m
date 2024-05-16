@@ -27,6 +27,9 @@ class Ordinal(Enum):
         self.sin = round(math.sin(math.radians(value)), 6)
         self.cos = round(math.cos(math.radians(value)), 6)
 
+    def __str__(self) -> str:
+        return self.name
+
     @property
     def opposite(self):
         return Ordinal((self.value + 180) % 360)

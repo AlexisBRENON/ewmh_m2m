@@ -1,3 +1,4 @@
+import math
 from typing import Set, Iterable, Dict, List, Optional
 
 import xpybutil.xinerama
@@ -17,13 +18,18 @@ def get_sibling_screens(current: Geometry, screens: Iterable[Geometry]) -> Dict[
 
     Each list is ordered from the nearest screen to the furthest one.
     """
-    horizontal_screens = [g for g in screens if current.horizontally_overlap(g)]
-    vertical_screens = [g for g in screens if current.vertically_overlap(g)]
+    directions = [
+        (g, current.directions_to(g)) for g in screens if g != current
+    ]
     return {
-        Ordinal.SOUTH: sorted([g for g in vertical_screens if g.y > current.y], key=lambda g: g.y),
-        Ordinal.NORTH: sorted([g for g in vertical_screens if g.y < current.y], key=lambda g: -1 * g.y),
-        Ordinal.EAST: sorted([g for g in horizontal_screens if g.x > current.x], key=lambda g: g.x),
-        Ordinal.WEST: sorted([g for g in horizontal_screens if g.x < current.x], key=lambda g: -1 * g.x)
+        o: sorted(
+            [g for g, dirs in directions if o in dirs],
+            key=lambda g: (
+                math.hypot(g.x - current.x, g.y - current.y),
+                math.copysign(g.x, o.cos) if abs(o.cos) > abs(o.sin) else math.copysign(g.y, o.sin)
+            )
+        )
+        for o in Ordinal
     }
 
 
@@ -36,4 +42,3 @@ def get_sibling_screen(siblings: Dict[Ordinal, List[Geometry]],
         if not no_wrap and siblings[direction.opposite]:
             return siblings[direction.opposite][-1]
     return None
-

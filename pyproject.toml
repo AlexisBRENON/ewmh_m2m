@@ -9,7 +9,7 @@ packages = ["src/ewmh_m2m"]
 source = "vcs"
 
 [tool.hatch.build.hooks.vcs]
-version-file = "src/ewmh_m2m/__init__.py"
+version-file = "src/ewmh_m2m/_version.py"
 
 [project]
 dynamic = ["version"]

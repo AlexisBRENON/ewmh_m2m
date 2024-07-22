@@ -22,7 +22,7 @@ jobs:
       - name: Install
         run: pip install '.[testing]' 'urllib3<1.27'
       - name: Test with pytest
-        run: pytest
+        run: pytest --cov ewmh_m2m --cov-report term-missing
 
   publish:
     runs-on: ubuntu-latest

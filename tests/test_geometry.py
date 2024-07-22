@@ -50,13 +50,43 @@ class TestGeometry:
         assert g2.overlap(g1)
 
     def test_directions_aligned(self):
+        """
+          0    1    2
+        0 +----+----+
+          | g1 | g2 |
+        1 +----+----+
+        """
         g1 = Geometry(0, 0, 1, 1)
         g2 = Geometry(1, 0, 1, 1)
 
         assert g1.directions_to(g2) == {Ordinal.EAST, Ordinal.EAST_NORTHEAST, Ordinal.EAST_SOUTHEAST}
 
     def test_directions_not_aligned(self):
+        """
+          0    1    2
+        0 +----+
+          | g1 |
+        1 +----+----+
+               | g2 |
+        2      +----+
+        """
         g1 = Geometry(0, 0, 1, 1)
         g2 = Geometry(1, 1, 1, 1)
 
         assert g1.directions_to(g2) == {Ordinal.SOUTH_SOUTHEAST, Ordinal.SOUTHEAST, Ordinal.EAST_SOUTHEAST}
+
+    def test_directions_overlap(self):
+        """
+          0    2    4
+        0 +----+
+        1 | g1 +----+
+        2 +----+ g2 |
+        3      +----+
+        """
+        g1 = Geometry(0, 0, 2, 2)
+        g2 = Geometry(2, 1, 2, 2)
+
+        assert g1.directions_to(g2) == {
+            Ordinal.EAST,
+            Ordinal.EAST_SOUTHEAST,
+        }

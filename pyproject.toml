@@ -43,7 +43,7 @@ move-to-monitor = "ewmh_m2m.__main__:main"
 
 
 [tool.pytest.ini_options]
-addopts = "--cov ewmh_m2m --cov-report term-missing --verbose"
+addopts = "--verbose"
 norecursedirs = [
     "dist",
     "build",

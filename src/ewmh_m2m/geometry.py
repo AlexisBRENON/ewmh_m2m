@@ -35,34 +35,32 @@ class Geometry:
             y=int(container.y + self.y * container.h)
         )
 
-    def horizontally_overlap(self, other) -> bool:
-        return self.y < other.y + other.h and self.y + self.h > other.y
-
-    def vertically_overlap(self, other) -> bool:
-        return self.x < other.x + other.w and self.x + self.w > other.x
-
-    def overlap(self, other) -> bool:
-        return self.horizontally_overlap(other) and self.vertically_overlap(other)
+    @property
+    def center(self) -> "Geometry":
+        return Geometry(x=self.x + self.w / 2, y=self.y + self.h / 2)
 
     def directions_to(self, other: "Geometry") -> typing.Collection[Ordinal]:
-        result = set(Ordinal)
-        if self.horizontally_overlap(other):
-            result &= {o for o in Ordinal if abs(o.sin) < 0.5}
-        elif self.vertically_overlap(other):
-            result &= {o for o in Ordinal if abs(o.cos) < 0.5}
-        else:
-            result -= {o for o in Ordinal if o.value % 90 == 0}
+        vector = Geometry(
+            other.center.x - self.center.x, other.center.y - self.center.y
+        )
+        vector_norm = math.sqrt(vector.x**2 + vector.y**2)
+        vector_cos = vector.x / vector_norm
+        vector_sin = -vector.y / vector_norm
 
-        if other.x > self.x:
-            result &= {o for o in Ordinal if o.cos >= 0 }
-        if other.y < self.y:
-            result &= {o for o in Ordinal if o.sin >= 0 }
-        if other.x < self.x:
-            result &= {o for o in Ordinal if o.cos <= 0 }
-        if other.y > self.y:
-            result &= {o for o in Ordinal if o.sin <= 0 }
-
-        return result
+        res = list(
+            sorted(
+                [
+                    (
+                        (o.cos - vector_cos) ** 2 + (o.sin - vector_sin) ** 2,
+                        o,
+                    )
+                    for o in list(Ordinal)
+                ],
+                key=lambda t: t[0],
+            )
+        )
+        print(res)
+        return [t[1] for t in res if t[0] <= 0.152]
 
     def __eq__(self, other):
         return list(self) == list(other)

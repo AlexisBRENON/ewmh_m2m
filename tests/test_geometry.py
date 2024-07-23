@@ -4,51 +4,6 @@ from ewmh_m2m.ordinal import Ordinal
 
 class TestGeometry:
 
-    def test_horizontally_not_overlap(self):
-        g1 = Geometry(0, 0, 1, 1)
-        g2 = Geometry(10, 10, 1, 1)
-
-        assert not g1.horizontally_overlap(g2)
-        assert not g2.horizontally_overlap(g1)
-
-    def test_horizontally_overlap(self):
-        g1 = Geometry(0, 0, 10, 10)
-        g2 = Geometry(100, 0, 10, 10)
-
-        assert g1.horizontally_overlap(g2)
-        assert g2.horizontally_overlap(g1)
-
-    def test_vertically_not_overlap(self):
-        g1 = Geometry(0, 0, 10, 10)
-        g2 = Geometry(100, 100, 10, 10)
-
-        assert not g1.vertically_overlap(g2)
-        assert not g2.vertically_overlap(g1)
-
-    def test_vertically_overlap(self):
-        g1 = Geometry(0, 0, 10, 10)
-        g2 = Geometry(0, 100, 10, 10)
-
-        assert g1.vertically_overlap(g2)
-        assert g2.vertically_overlap(g1)
-
-    def test_not_overlap(self):
-        g1 = Geometry(0, 0, 10, 10)
-        g2 = Geometry(100, 0, 10, 10)
-        g3 = Geometry(0, 100, 10, 10)
-
-        assert not g1.overlap(g2)
-        assert not g2.overlap(g1)
-        assert not g1.overlap(g3)
-        assert not g3.overlap(g1)
-
-    def test_overlap(self):
-        g1 = Geometry(0, 0, 10, 10)
-        g2 = Geometry(1, 1, 8, 8)
-
-        assert g1.overlap(g2)
-        assert g2.overlap(g1)
-
     def test_directions_aligned(self):
         """
           0    1    2
@@ -59,7 +14,7 @@ class TestGeometry:
         g1 = Geometry(0, 0, 1, 1)
         g2 = Geometry(1, 0, 1, 1)
 
-        assert g1.directions_to(g2) == {Ordinal.EAST, Ordinal.EAST_NORTHEAST, Ordinal.EAST_SOUTHEAST}
+        assert list(g1.directions_to(g2)) == [Ordinal.EAST]
 
     def test_directions_not_aligned(self):
         """
@@ -73,7 +28,7 @@ class TestGeometry:
         g1 = Geometry(0, 0, 1, 1)
         g2 = Geometry(1, 1, 1, 1)
 
-        assert g1.directions_to(g2) == {Ordinal.SOUTH_SOUTHEAST, Ordinal.SOUTHEAST, Ordinal.EAST_SOUTHEAST}
+        assert list(g1.directions_to(g2)) == [Ordinal.SOUTHEAST]
 
     def test_directions_overlap(self):
         """
@@ -86,7 +41,32 @@ class TestGeometry:
         g1 = Geometry(0, 0, 2, 2)
         g2 = Geometry(2, 1, 2, 2)
 
-        assert g1.directions_to(g2) == {
-            Ordinal.EAST,
+        assert list(g1.directions_to(g2)) == [
             Ordinal.EAST_SOUTHEAST,
-        }
+            Ordinal.SOUTHEAST,
+        ]
+
+    def test_gleb_setup(self):
+        """
+        https://github.com/AlexisBRENON/ewmh_m2m/pull/25
+             0    1080     3000
+        0          ┌─────────┐
+        130  ┌─────┤         │
+             │     │    g1   │
+             │     │         │
+        1080 │  g2 ├─────────┤
+             │     │         │
+             │     │    g3   │
+        2050 └─────┤         │
+        2160       └─────────┘
+        """
+        g1 = Geometry(1080, 0, 1920, 1080)
+        g2 = Geometry(0, 130, 1080, 1920)
+        g3 = Geometry(1080, 1080, 1920, 1080)
+
+        assert list(g1.directions_to(g2)) == [Ordinal.WEST_SOUTHWEST, Ordinal.WEST]
+        assert list(g1.directions_to(g3)) == [Ordinal.SOUTH]
+        assert list(g2.directions_to(g1)) == [Ordinal.EAST_NORTHEAST, Ordinal.EAST]
+        assert list(g2.directions_to(g3)) == [Ordinal.EAST_SOUTHEAST, Ordinal.EAST]
+        assert list(g3.directions_to(g1)) == [Ordinal.NORTH]
+        assert list(g3.directions_to(g2)) == [Ordinal.WEST_NORTHWEST, Ordinal.WEST]

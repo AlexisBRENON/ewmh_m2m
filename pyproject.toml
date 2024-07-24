@@ -50,3 +50,4 @@ norecursedirs = [
     ".tox"
 ]
 testpaths = ["tests"]
+log_level = "DEBUG"

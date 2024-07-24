@@ -34,6 +34,8 @@ def move_to_screen(args):
             args.direction, args.no_wrap)
         if not new_screen:
             raise ValueError("No sibling screen found")
+        else:
+            _logger.debug("Moving to %s", new_screen)
 
         new_window_geometry = relative_geometry.build_absolute(new_screen)
         _logger.debug("New window geometry: %s", new_window_geometry)
@@ -57,13 +59,14 @@ def main():
         action="store",
         type=Ordinal.__getitem__,
         choices=sorted(Ordinal, key=lambda o: o.value),
-        default=Ordinal.EAST_SOUTHEAST,
+        default=Ordinal.EAST,
         help="Direction in which to move the window (default: %(default)s)",
     )
     arg_parser.add_argument("--no-wrap", "-W", action="store_true", help="Do not go back if no screen found.")
 
     args = arg_parser.parse_args()
     setup_log(args)
+    _logger.debug("Arguments: %s", args)
     move_to_screen(args)
 
 

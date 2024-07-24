@@ -59,7 +59,6 @@ class Geometry:
                 key=lambda t: t[0],
             )
         )
-        print(res)
         return [t[1] for t in res if t[0] <= 0.152]
 
     def __eq__(self, other):

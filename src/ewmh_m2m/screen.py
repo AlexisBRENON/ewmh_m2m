@@ -1,10 +1,15 @@
+import logging
+import math
 from typing import Set, Iterable, Dict, List, Optional
+import pprint
 
 import xpybutil.xinerama
 
 from ewmh_m2m.geometry import Geometry
 from ewmh_m2m.ordinal import Ordinal
 
+
+_logger = logging.getLogger(__name__)
 
 def get_screens() -> Set[Geometry]:
     """Get the list of active screens.
@@ -17,14 +22,25 @@ def get_sibling_screens(current: Geometry, screens: Iterable[Geometry]) -> Dict[
 
     Each list is ordered from the nearest screen to the furthest one.
     """
-    horizontal_screens = [g for g in screens if current.horizontally_overlap(g)]
-    vertical_screens = [g for g in screens if current.vertically_overlap(g)]
-    return {
-        Ordinal.SOUTH: sorted([g for g in vertical_screens if g.y > current.y], key=lambda g: g.y),
-        Ordinal.NORTH: sorted([g for g in vertical_screens if g.y < current.y], key=lambda g: -1 * g.y),
-        Ordinal.EAST: sorted([g for g in horizontal_screens if g.x > current.x], key=lambda g: g.x),
-        Ordinal.WEST: sorted([g for g in horizontal_screens if g.x < current.x], key=lambda g: -1 * g.x)
+    directions = [
+        (g, current.directions_to(g)) for g in screens if g != current
+    ]
+    res = {
+        o: sorted(
+            [g for g, dirs in directions if o in dirs],
+            key=lambda g: (
+                math.hypot(g.x - current.x, g.y - current.y),
+                (
+                    math.copysign(g.x, o.cos)
+                    if abs(o.cos) > abs(o.sin)
+                    else math.copysign(g.y, o.sin)
+                ),
+            ),
+        )
+        for o in Ordinal
     }
+    _logger.debug("siblings of %s:\n%s", current, pprint.pformat(res))
+    return res
 
 
 def get_sibling_screen(siblings: Dict[Ordinal, List[Geometry]],
@@ -34,6 +50,6 @@ def get_sibling_screen(siblings: Dict[Ordinal, List[Geometry]],
         return siblings[direction][0]
     else:
         if not no_wrap and siblings[direction.opposite]:
+            _logger.debug("Wrapping")
             return siblings[direction.opposite][-1]
     return None
-

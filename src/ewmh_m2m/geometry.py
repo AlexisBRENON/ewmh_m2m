@@ -1,3 +1,8 @@
+import math
+import typing
+from ewmh_m2m.ordinal import Ordinal
+
+
 class Geometry:
     """Data class to manipulate rectangles defined as (x, y, w, h)"""
     def __init__(self, x: float = 0, y: float = 0, w: float = 0, h: float = 0):
@@ -30,14 +35,31 @@ class Geometry:
             y=int(container.y + self.y * container.h)
         )
 
-    def horizontally_overlap(self, other) -> bool:
-        return self.y < other.y + other.h and self.y + self.h > other.y
+    @property
+    def center(self) -> "Geometry":
+        return Geometry(x=self.x + self.w / 2, y=self.y + self.h / 2)
 
-    def vertically_overlap(self, other) -> bool:
-        return self.x < other.x + other.w and self.x + self.w > other.x
+    def directions_to(self, other: "Geometry") -> typing.Collection[Ordinal]:
+        vector = Geometry(
+            other.center.x - self.center.x, other.center.y - self.center.y
+        )
+        vector_norm = math.sqrt(vector.x**2 + vector.y**2)
+        vector_cos = vector.x / vector_norm
+        vector_sin = -vector.y / vector_norm
 
-    def overlap(self, other) -> bool:
-        return self.horizontally_overlap(other) and self.vertically_overlap(other)
+        res = list(
+            sorted(
+                [
+                    (
+                        (o.cos - vector_cos) ** 2 + (o.sin - vector_sin) ** 2,
+                        o,
+                    )
+                    for o in list(Ordinal)
+                ],
+                key=lambda t: t[0],
+            )
+        )
+        return [t[1] for t in res if t[0] <= 0.152]
 
     def __eq__(self, other):
         return list(self) == list(other)

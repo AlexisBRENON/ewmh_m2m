@@ -33,6 +33,7 @@ dependencies = [
 
 [project.optional-dependencies]
 testing = [ "pytest", "pytest-cov" ]
+docs = [ "sphinx~=7.4" ]
 
 [project.urls]
 Documentation = "https://ewmh-m2m.readthedocs.io"
